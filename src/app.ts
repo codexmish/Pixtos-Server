@@ -3,10 +3,15 @@ import cors from "cors"
 import envConfig from "./app/configs/envConfig";
 import helmet from "helmet";
 import cookieParser from "cookie-parser"
+import { globalErrorHandaler } from "./app/middleware/globalErrorHandaler";
+import { requestLogger } from "./app/middleware/requestLogger";
 
 
 const app: Application = express()
 
+
+// =====request logger (first, so every request is logged)
+app.use(requestLogger);
 
 app.use(helmet());
 app.use(express.json())
@@ -28,6 +33,12 @@ app.get("/", async (req: Request, res: Response) => {
 		message: "Welcome to Pixtos",
 	});
 });
+
+
+
+
+// =======
+app.use(globalErrorHandaler)
 
 
 export default app;
