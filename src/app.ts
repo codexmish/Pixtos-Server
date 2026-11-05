@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.get("/", async (req: Request, res: Response) => {
 	res.status(200).json({
 		success: true,
-		message: "Welcome to Blood for life",
+		message: "Welcome to Pixtos",
 	});
 });
 
