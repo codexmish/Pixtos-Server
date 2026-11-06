@@ -7,15 +7,15 @@ const router = Router();
 
 // -----signup router
 router.post(
-  "/signup",
-  zodValidation(userSignupSchema),
-  authControllers.signupContorller,
+	"/signup",
+	zodValidation(userSignupSchema),
+	authControllers.signupContorller,
 );
 
 router.post(
-  "/otp-verify",
-  zodValidation(otpVerifySchema),
-  authControllers.otpVerifyController,
+	"/otp-verify",
+	zodValidation(otpVerifySchema),
+	authControllers.otpVerifyController,
 );
 
 export const authRouter = router;

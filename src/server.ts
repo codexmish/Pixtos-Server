@@ -2,14 +2,12 @@ import app from "./app";
 import { dbConfig } from "./app/configs/dbConfig";
 import envConfig from "./app/configs/envConfig";
 import { redisClient } from "./app/configs/redisConfig";
-const port = envConfig.port
-
+const port = envConfig.port;
 
 const main = async () => {
 	try {
-
-        // ----db connection
-        await dbConfig()
+		// ----db connection
+		await dbConfig();
 
 		// -----redis connection
 		await redisClient.connect();

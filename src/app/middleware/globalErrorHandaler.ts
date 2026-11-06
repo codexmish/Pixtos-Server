@@ -6,9 +6,12 @@ import { AppError } from "../lib/AppError";
 import { sendResponse } from "../lib/sendResponse";
 import { ZodError } from "zod";
 
-
-
-export const globalErrorHandaler = (err: any, req: Request, res:Response, next: NextFunction) => {
+export const globalErrorHandaler = (
+	err: any,
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	// -----initial error res data
 	let statusCode: number = httpStatus.INTERNAL_SERVER_ERROR;
 	let errMessage =
@@ -52,7 +55,7 @@ export const globalErrorHandaler = (err: any, req: Request, res:Response, next: 
 	// ------final err response send to client
 	sendResponse(res, {
 		statusCode,
-        success: false,
+		success: false,
 		message: errMessage,
 	});
 };

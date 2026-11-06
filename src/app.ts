@@ -1,21 +1,19 @@
-import express, { Application, Request, Response } from "express"
-import cors from "cors"
+import express, { Application, Request, Response } from "express";
+import cors from "cors";
 import envConfig from "./app/configs/envConfig";
 import helmet from "helmet";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 import { globalErrorHandaler } from "./app/middleware/globalErrorHandaler";
 import { requestLogger } from "./app/middleware/requestLogger";
 import router from "./app/routes";
 
-
-const app: Application = express()
-
+const app: Application = express();
 
 // =====request logger (first, so every request is logged)
 app.use(requestLogger);
 
 app.use(helmet());
-app.use(express.json())
+app.use(express.json());
 app.use(
 	cors({
 		origin: envConfig.frontend_url,
@@ -35,11 +33,7 @@ app.get("/", async (req: Request, res: Response) => {
 	});
 });
 
-
-
-
 // =======
-app.use(globalErrorHandaler)
-
+app.use(globalErrorHandaler);
 
 export default app;

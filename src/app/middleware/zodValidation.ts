@@ -4,7 +4,6 @@ import httpStatus from "http-status";
 import { catchAsync } from "../lib/catchAsync";
 import { AppError } from "../lib/AppError";
 
-
 export const zodValidation = (zodSchema: z.ZodObject) => {
 	return catchAsync((req: Request, res: Response, next: NextFunction) => {
 		const payload = req.body ?? {};

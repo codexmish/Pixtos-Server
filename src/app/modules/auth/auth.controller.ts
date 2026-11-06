@@ -5,18 +5,16 @@ import { sendResponse } from "../../lib/sendResponse";
 import httpStatus from "http-status";
 import envConfig from "../../configs/envConfig";
 
-
 // ------register controller
-const signupContorller = catchAsync(async(req:Request, res: Response)=>{
-    const result = await authServices.signupServices(req.body);
+const signupContorller = catchAsync(async (req: Request, res: Response) => {
+	const result = await authServices.signupServices(req.body);
 
 	sendResponse(res, {
 		statusCode: httpStatus.OK,
 		success: true,
 		message: "Check your email",
 	});
-})
-
+});
 
 // -------otp verify and create user controller
 const otpVerifyController = catchAsync(async (req: Request, res: Response) => {
@@ -47,8 +45,4 @@ const otpVerifyController = catchAsync(async (req: Request, res: Response) => {
 	});
 });
 
-
-
-
-
-export const authControllers = {signupContorller, otpVerifyController}
+export const authControllers = { signupContorller, otpVerifyController };
