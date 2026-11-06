@@ -1,6 +1,7 @@
 import app from "./app";
 import { dbConfig } from "./app/configs/dbConfig";
 import envConfig from "./app/configs/envConfig";
+import { redisClient } from "./app/configs/redisConfig";
 const port = envConfig.port
 
 
@@ -10,6 +11,9 @@ const main = async () => {
         // ----db connection
         await dbConfig()
 
+		// -----redis connection
+		await redisClient.connect();
+		console.log("redis connected");
 
 		app.listen(port, () => {
 			console.log(`server running on port ${port}`);
