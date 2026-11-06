@@ -3,3 +3,8 @@ export interface ISignup {
 	email: string;
 	password: string;
 }
+
+export interface IOtpVerify {
+	email: string;
+	otp: string;
+}

@@ -23,6 +23,6 @@ export const getRedis = async (key: string) => {
 };
 
 // -----delete data
-export const deleteRedis = async (key: string) => {
+export const deleteRedis = async (key: string | string[]) => {
 	await redisClient.del(key);
 };
