@@ -5,6 +5,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser"
 import { globalErrorHandaler } from "./app/middleware/globalErrorHandaler";
 import { requestLogger } from "./app/middleware/requestLogger";
+import router from "./app/routes";
 
 
 const app: Application = express()
@@ -25,7 +26,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
+app.use(envConfig.BASE_URL, router);
 // ========Test route======
 app.get("/", async (req: Request, res: Response) => {
 	res.status(200).json({
