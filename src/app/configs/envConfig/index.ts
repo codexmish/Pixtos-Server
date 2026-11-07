@@ -25,6 +25,9 @@ const envSchema = z.object({
 	CLOUDINARY_CLOUD_NAME: z.string().min(1),
 	CLOUDINARY_API_KEY: z.string().min(1),
 	CLOUDINARY_API_SECRET: z.string().min(1),
+	IMAGEKIT_PUBLIC_KEY: z.string().min(1),
+	IMAGEKIT_PRIVATE_KEY: z.string().min(1),
+	IMAGEKIT_URL_ENDPOINT: z.string().min(1),
 });
 
 // -----check process.env against the schema, print which vars are wrong and exit
@@ -60,4 +63,7 @@ export default {
 	CLOUDINARY_CLOUD_NAME: env.CLOUDINARY_CLOUD_NAME,
 	CLOUDINARY_API_KEY: env.CLOUDINARY_API_KEY,
 	CLOUDINARY_API_SECRET: env.CLOUDINARY_API_SECRET,
+	IMAGEKIT_PUBLIC_KEY: env.IMAGEKIT_PUBLIC_KEY,
+	IMAGEKIT_PRIVATE_KEY: env.IMAGEKIT_PRIVATE_KEY,
+	IMAGEKIT_URL_ENDPOINT: env.IMAGEKIT_URL_ENDPOINT,
 };
