@@ -1,9 +1,22 @@
 import { Request, Response } from "express";
 import { catchAsync } from "../../lib/catchAsync";
+import { mediaServices } from "./media.services";
+import { sendResponse } from "../../lib/sendResponse";
+import httpStatus from "http-status";
 
 // -----upload media controller
 const uploadMediaController = catchAsync(
-  async (req: Request, res: Response) => {},
+  async (req: Request, res: Response) => {
+    const result = await mediaServices.uploadMediaServices(req.files as Express.Multer.File[], req.user?.userId as string)
+
+
+    sendResponse(res, {
+			statusCode: httpStatus.CREATED,
+			success: true,
+			message: "Media uploaded successfully",
+			data: result,
+		});
+  },
 );
 
 // -----get media controller
