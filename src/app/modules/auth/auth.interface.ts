@@ -8,3 +8,27 @@ export interface IOtpVerify {
 	email: string;
 	otp: string;
 }
+
+export interface ISignIn {
+	email: string;
+	password: string;
+}
+
+export interface IForgetPass {
+	email: string;
+}
+
+export interface IResetPassword {
+	email: string;
+	otp: string;
+	newPassword: string;
+}
+
+export interface IResendOtp {
+	email: string;
+}
+
+export interface IChangePassword {
+	oldPassword: string;
+	newPassword: string;
+}
