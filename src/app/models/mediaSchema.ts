@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { Schema } from "zod/v3";
 
 const media = new mongoose.Schema(
 	{
