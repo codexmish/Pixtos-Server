@@ -159,7 +159,6 @@ const otpVerifyServices = async (payload: IOtpVerify) => {
 	};
 };
 
-
 // ------signIn services
 const signInServices = async (payload: ISignIn) => {
 	const { email, password } = payload;
