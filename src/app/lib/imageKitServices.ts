@@ -1,31 +1,32 @@
-import ImageKit, { toFile } from "@imagekit/nodejs"
-import { imagekitClient } from "../configs/imageKitConfig"
+import ImageKit, { toFile } from "@imagekit/nodejs";
+import { imagekitClient } from "../configs/imageKitConfig";
 
-export const mediaUpload = async(file: Express.Multer.File)=>{
-            const isVideo = file.mimetype.startsWith("video/")
-            const fileObj = await toFile(file.buffer, file.originalname, {type: file.mimetype})
-    
-            const uploadParams: ImageKit.FileUploadParams = {
-                file: fileObj,
-                fileName: `${file.originalname}-${Date.now()}`,
-                folder: isVideo? "/my-videos" : "/my-photos",
-                useUniqueFileName: true,
-                responseFields: ["tags"]
-            }
-    
-            if(!isVideo){
-                uploadParams.extensions = [
-                    {
-                        name: "google-auto-tagging",
-                    minConfidence: 60,
-                    maxTags: 10
-                    }
-                ]
-            }
-    
-            const imageKitRes = await imagekitClient.files.upload(uploadParams)
-            // console.log(imageKitRes);
-            
+export const mediaUpload = async (file: Express.Multer.File) => {
+	const isVideo = file.mimetype.startsWith("video/");
+	const fileObj = await toFile(file.buffer, file.originalname, {
+		type: file.mimetype,
+	});
 
-            return imageKitRes
-}
+	const uploadParams: ImageKit.FileUploadParams = {
+		file: fileObj,
+		fileName: `${file.originalname}-${Date.now()}`,
+		folder: isVideo ? "/my-videos" : "/my-photos",
+		useUniqueFileName: true,
+		responseFields: ["tags"],
+	};
+
+	if (!isVideo) {
+		uploadParams.extensions = [
+			{
+				name: "google-auto-tagging",
+				minConfidence: 60,
+				maxTags: 10,
+			},
+		];
+	}
+
+	const imageKitRes = await imagekitClient.files.upload(uploadParams);
+	// console.log(imageKitRes);
+
+	return imageKitRes;
+};

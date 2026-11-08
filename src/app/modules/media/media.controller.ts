@@ -6,80 +6,85 @@ import httpStatus from "http-status";
 
 // -----upload media controller
 const uploadMediaController = catchAsync(
-  async (req: Request, res: Response) => {
-    const result = await mediaServices.uploadMediaServices(req.files as Express.Multer.File[], req.user?.userId as string)
+	async (req: Request, res: Response) => {
+		const result = await mediaServices.uploadMediaServices(
+			req.files as Express.Multer.File[],
+			req.user?.userId as string,
+		);
 
-
-    sendResponse(res, {
+		sendResponse(res, {
 			statusCode: httpStatus.CREATED,
 			success: true,
 			message: "Media uploaded successfully",
 			data: result,
 		});
-  },
+	},
 );
 
 // -----get media controller
-const getMediaController = catchAsync(
-  async (req: Request, res: Response) => {
+const getMediaController = catchAsync(async (req: Request, res: Response) => {
+	const result = await mediaServices.getMediaServices(
+		req.query as any,
+		req.user?.userId as string,
+	);
 
-    const result = await mediaServices.getMediaServices(req.query as any, req.user?.userId as string)
-
-    sendResponse(res, {
-			statusCode: httpStatus.CREATED,
-			success: true,
-			message: "Media get successfully",
-			data: result,
-		});
-  },
-);
+	sendResponse(res, {
+		statusCode: httpStatus.CREATED,
+		success: true,
+		message: "Media get successfully",
+		data: result,
+	});
+});
 
 // ----- toggleFavorite controller
 const toggleFavoriteController = catchAsync(
-  async (req: Request, res: Response) => {
-    const result = await mediaServices.toggleFavoriteServices(req.params.id as string, req.user?.userId as string)
+	async (req: Request, res: Response) => {
+		const result = await mediaServices.toggleFavoriteServices(
+			req.params.id as string,
+			req.user?.userId as string,
+		);
 
-    sendResponse(res, {
+		sendResponse(res, {
 			statusCode: httpStatus.CREATED,
 			success: true,
 			message: "Media fevarite update successfully",
 			data: result,
 		});
-  },
+	},
 );
 
 // ----- toggletrash controller
 const toggleTrashController = catchAsync(
-  async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {},
 );
 
 // ----- gettrash controller
 const getTrashController = catchAsync(
-  async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {},
 );
 
 // ----- delete Media Permanently controller
 const deleteMediaPermanentlyController = catchAsync(
-  async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {},
 );
 
 // ----- empty Trash controller
 const emptyTrashController = catchAsync(
-  async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {},
 );
 
 // ----- get Storage Stats controller
 const getStorageStatsController = catchAsync(
-  async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {},
 );
 
 export const mediaController = {
-  uploadMediaController,
-  getMediaController,
-  toggleFavoriteController,
-  toggleTrashController,
-  getTrashController,
-  deleteMediaPermanentlyController,
-  emptyTrashController,
-  getStorageStatsController
+	uploadMediaController,
+	getMediaController,
+	toggleFavoriteController,
+	toggleTrashController,
+	getTrashController,
+	deleteMediaPermanentlyController,
+	emptyTrashController,
+	getStorageStatsController,
 };
