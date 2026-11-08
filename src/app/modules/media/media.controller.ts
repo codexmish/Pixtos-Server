@@ -55,7 +55,20 @@ const toggleFavoriteController = catchAsync(
 
 // ----- toggletrash controller
 const toggleTrashController = catchAsync(
-	async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {
+    const result = await mediaServices.toggleTrashServices(
+			req.params.id as string,
+			req.user?.userId as string,
+      req.body
+		);
+
+		sendResponse(res, {
+	statusCode: httpStatus.OK,
+	success: true,
+	message: result.isTrash ? "Moved to trash" : "Restored from trash",
+	data: result,
+});
+  },
 );
 
 // ----- gettrash controller

@@ -23,4 +23,12 @@ router.post(
 	mediaController.toggleFavoriteController,
 );
 
+// -----move to trash / restore router
+router.patch("/trash-toggle/:id",
+     authCheck(), 
+     mediaController.toggleTrashController);
+
+
+
+
 export const mediaRouter = router;

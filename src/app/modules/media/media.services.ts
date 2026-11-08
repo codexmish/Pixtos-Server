@@ -5,6 +5,7 @@ import { imagekitClient } from "../../configs/imageKitConfig";
 import envConfig from "../../configs/envConfig";
 import { mediaSchema } from "../../models/mediaSchema";
 import { mediaUpload } from "../../lib/imageKitServices";
+import { IToggleTrash } from "./media.interface";
 
 // -----upload media Services
 const uploadMediaServices = async (
@@ -112,8 +113,37 @@ const toggleFavoriteServices = async (mediaId: string, userId: string) => {
 	return;
 };
 
+
+// ------toggle trash services
+const toggleTrashServices = async (
+	mediaId: string,
+	userId: string,
+	body: IToggleTrash = {},
+) => {
+	
+    const {restore} = body
+
+    // -----getting media data
+	const item = await mediaSchema.findOne({
+		_id: mediaId,
+		owner: userId,
+	});
+
+	if (!item) {
+		throw new AppError(httpStatus.NOT_FOUND, "Media not found");
+	}
+
+	// -----toggleing item is Trash
+	item.isTrash = !restore;
+    item.trashedAt = restore? null : new Date()
+	await item.save();
+
+	return item;
+};
+
 export const mediaServices = {
 	uploadMediaServices,
 	getMediaServices,
 	toggleFavoriteServices,
+    toggleTrashServices
 };
