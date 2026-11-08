@@ -29,7 +29,7 @@ const getMediaController = catchAsync(async (req: Request, res: Response) => {
 	);
 
 	sendResponse(res, {
-		statusCode: httpStatus.CREATED,
+		statusCode: httpStatus.OK,
 		success: true,
 		message: "Media get successfully",
 		data: result,
@@ -45,7 +45,7 @@ const toggleFavoriteController = catchAsync(
 		);
 
 		sendResponse(res, {
-			statusCode: httpStatus.CREATED,
+			statusCode: httpStatus.OK,
 			success: true,
 			message: "Media fevarite update successfully",
 			data: result,
@@ -73,7 +73,19 @@ const toggleTrashController = catchAsync(
 
 // ----- gettrash controller
 const getTrashController = catchAsync(
-	async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {
+    const result = await mediaServices.getTrashServices(
+			req.user?.userId as string,
+		);
+
+
+    sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "All Trash Media get successfully",
+		data: result,
+	});
+  },
 );
 
 // ----- delete Media Permanently controller

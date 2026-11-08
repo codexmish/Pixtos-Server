@@ -29,6 +29,13 @@ router.patch("/trash-toggle/:id",
      mediaController.toggleTrashController);
 
 
+    //  ----get all trash media
+    router.get("/trash",
+        authCheck(),
+        mediaController.getTrashController
+    )
+
+
 
 
 export const mediaRouter = router;

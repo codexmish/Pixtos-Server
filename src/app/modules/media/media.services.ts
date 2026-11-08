@@ -141,9 +141,23 @@ const toggleTrashServices = async (
 	return item;
 };
 
+
+// ----get trash services
+const getTrashServices = async(userId: string)=>{
+
+    // ----getting all trsh
+    const media = await mediaSchema.find({
+        owner: userId,
+        isTrash: true
+    }).sort({trashedAt: -1})
+
+    return media
+}
+
 export const mediaServices = {
 	uploadMediaServices,
 	getMediaServices,
 	toggleFavoriteServices,
-    toggleTrashServices
+    toggleTrashServices,
+    getTrashServices
 };
