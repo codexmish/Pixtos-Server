@@ -99,4 +99,24 @@ const getMediaServices = async(queryData: any, userId: string)=>{
 }
 
 
-export const mediaServices = {uploadMediaServices, getMediaServices}
+// ------toggle favorite services
+const toggleFavoriteServices = async(mediaId: string, userId: string)=>{
+    // -----getting media data
+    const item = await mediaSchema.findOne({
+        _id: mediaId,
+        owner: userId
+    })
+
+    if(!item){
+        throw new AppError(httpStatus.NOT_FOUND, "Media not found")
+    }
+
+    // -----toggleing item is favorite
+    item.isFavorite = !item.isFavorite
+    await item.save()
+
+    return 
+}
+
+
+export const mediaServices = {uploadMediaServices, getMediaServices, toggleFavoriteServices}

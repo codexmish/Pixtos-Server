@@ -36,7 +36,16 @@ const getMediaController = catchAsync(
 
 // ----- toggleFavorite controller
 const toggleFavoriteController = catchAsync(
-  async (req: Request, res: Response) => {},
+  async (req: Request, res: Response) => {
+    const result = await mediaServices.toggleFavoriteServices(req.params.id as string, req.user?.userId as string)
+
+    sendResponse(res, {
+			statusCode: httpStatus.CREATED,
+			success: true,
+			message: "Media fevarite update successfully",
+			data: result,
+		});
+  },
 );
 
 // ----- toggletrash controller

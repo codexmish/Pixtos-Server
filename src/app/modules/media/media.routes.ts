@@ -22,4 +22,12 @@ router.get(
 );
 
 
+// -----signup router
+router.post(
+    "/fav-toggle/:id",
+    authCheck(),
+    mediaController.toggleFavoriteController,
+);
+
+
 export const mediaRouter = router;
