@@ -1,6 +1,7 @@
 import ImageKit, { toFile } from "@imagekit/nodejs";
 import { imagekitClient } from "../configs/imageKitConfig";
 
+// ----upload media
 export const mediaUpload = async (file: Express.Multer.File) => {
 	const isVideo = file.mimetype.startsWith("video/");
 	const fileObj = await toFile(file.buffer, file.originalname, {
@@ -29,4 +30,13 @@ export const mediaUpload = async (file: Express.Multer.File) => {
 	// console.log(imageKitRes);
 
 	return imageKitRes;
+};
+
+// -----delete media
+export const mediaDelete = async (fileId: string) => {
+	try {
+		await imagekitClient.files.delete(fileId);
+	} catch (error: any) {
+		console.log("file delatein failed:", error.message);
+	}
 };

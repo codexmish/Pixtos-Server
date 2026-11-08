@@ -56,41 +56,50 @@ const toggleFavoriteController = catchAsync(
 // ----- toggletrash controller
 const toggleTrashController = catchAsync(
 	async (req: Request, res: Response) => {
-    const result = await mediaServices.toggleTrashServices(
+		const result = await mediaServices.toggleTrashServices(
 			req.params.id as string,
 			req.user?.userId as string,
-      req.body
+			req.body,
 		);
 
 		sendResponse(res, {
-	statusCode: httpStatus.OK,
-	success: true,
-	message: result.isTrash ? "Moved to trash" : "Restored from trash",
-	data: result,
-});
-  },
+			statusCode: httpStatus.OK,
+			success: true,
+			message: result.isTrash ? "Moved to trash" : "Restored from trash",
+			data: result,
+		});
+	},
 );
 
 // ----- gettrash controller
-const getTrashController = catchAsync(
-	async (req: Request, res: Response) => {
-    const result = await mediaServices.getTrashServices(
-			req.user?.userId as string,
-		);
+const getTrashController = catchAsync(async (req: Request, res: Response) => {
+	const result = await mediaServices.getTrashServices(
+		req.user?.userId as string,
+	);
 
-
-    sendResponse(res, {
+	sendResponse(res, {
 		statusCode: httpStatus.OK,
 		success: true,
 		message: "All Trash Media get successfully",
 		data: result,
 	});
-  },
-);
+});
 
 // ----- delete Media Permanently controller
 const deleteMediaPermanentlyController = catchAsync(
-	async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {
+		const result = await mediaServices.deleteMediaPermanentlyServices(
+			req.params.id as string,
+			req.user?.userId as string,
+		);
+
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "Media permanently deleted",
+			data: result,
+		});
+	},
 );
 
 // ----- empty Trash controller

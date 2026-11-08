@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 import { imagekitClient } from "../../configs/imageKitConfig";
 import envConfig from "../../configs/envConfig";
 import { mediaSchema } from "../../models/mediaSchema";
-import { mediaUpload } from "../../lib/imageKitServices";
+import { mediaDelete, mediaUpload } from "../../lib/imageKitServices";
 import { IToggleTrash } from "./media.interface";
 
 // -----upload media Services
@@ -113,17 +113,15 @@ const toggleFavoriteServices = async (mediaId: string, userId: string) => {
 	return;
 };
 
-
 // ------toggle trash services
 const toggleTrashServices = async (
 	mediaId: string,
 	userId: string,
 	body: IToggleTrash = {},
 ) => {
-	
-    const {restore} = body
+	const { restore } = body;
 
-    // -----getting media data
+	// -----getting media data
 	const item = await mediaSchema.findOne({
 		_id: mediaId,
 		owner: userId,
@@ -135,29 +133,58 @@ const toggleTrashServices = async (
 
 	// -----toggleing item is Trash
 	item.isTrash = !restore;
-    item.trashedAt = restore? null : new Date()
+	item.trashedAt = restore ? null : new Date();
 	await item.save();
 
 	return item;
 };
 
-
 // ----get trash services
-const getTrashServices = async(userId: string)=>{
+const getTrashServices = async (userId: string) => {
+	// ----getting all trsh
+	const media = await mediaSchema
+		.find({
+			owner: userId,
+			isTrash: true,
+		})
+		.sort({ trashedAt: -1 });
 
-    // ----getting all trsh
-    const media = await mediaSchema.find({
-        owner: userId,
-        isTrash: true
-    }).sort({trashedAt: -1})
+	return media;
+};
 
-    return media
-}
+// ------delete Media Permanently services
+const deleteMediaPermanentlyServices = async (
+	mediaId: string,
+	userId: string,
+) => {
+	// ----find item on trash
+	const item = await mediaSchema.findOne({
+		_id: mediaId,
+		owner: userId,
+		isTrash: true,
+	});
+
+	if (!item) {
+		throw new AppError(httpStatus.NOT_FOUND, "Media not found");
+	}
+
+	// -----deleting file
+	if (item.fileId) {
+		await mediaDelete(item.fileId);
+	}
+
+	// -----remove media from any album
+
+	await item.deleteOne();
+
+	return;
+};
 
 export const mediaServices = {
 	uploadMediaServices,
 	getMediaServices,
 	toggleFavoriteServices,
-    toggleTrashServices,
-    getTrashServices
+	toggleTrashServices,
+	getTrashServices,
+	deleteMediaPermanentlyServices,
 };

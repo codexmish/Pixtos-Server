@@ -24,18 +24,13 @@ router.post(
 );
 
 // -----move to trash / restore router
-router.patch("/trash-toggle/:id",
-     authCheck(), 
-     mediaController.toggleTrashController);
+router.patch(
+	"/trash-toggle/:id",
+	authCheck(),
+	mediaController.toggleTrashController,
+);
 
-
-    //  ----get all trash media
-    router.get("/trash",
-        authCheck(),
-        mediaController.getTrashController
-    )
-
-
-
+//  ----get all trash media
+router.get("/trash", authCheck(), mediaController.getTrashController);
 
 export const mediaRouter = router;
