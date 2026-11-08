@@ -56,7 +56,7 @@ const media = new mongoose.Schema(
 			default: false,
 			index: true,
 		},
-		isFTrash: {
+		isTrash: {
 			type: Boolean,
 			default: false,
 			index: true,

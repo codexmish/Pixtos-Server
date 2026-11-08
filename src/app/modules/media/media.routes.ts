@@ -14,5 +14,12 @@ router.post(
     mediaController.uploadMediaController,
 );
 
+// -----signup router
+router.get(
+    "/",
+    authCheck(),
+    mediaController.getMediaController,
+);
+
 
 export const mediaRouter = router;

@@ -19,27 +19,6 @@ const uploadMediaServices = async(files: Express.Multer.File[], userId:string)=>
     for(const file of files){
         const isVideo = file.mimetype.startsWith("video/")
         const mediaType = isVideo ? "video" : "image"
-        // const fileObj = await toFile(file.buffer, file.originalname, {type: file.mimetype})
-
-        // const uploadParams: ImageKit.FileUploadParams = {
-        //     file: fileObj,
-        //     fileName: `${file.originalname}-${Date.now()}`,
-        //     folder: isVideo? "/my-videos" : "/my-photos",
-        //     useUniqueFileName: true,
-        //     responseFields: ["tags"]
-        // }
-
-        // if(!isVideo){
-        //     uploadParams.extensions = [
-        //         {
-        //             name: "google-auto-tagging",
-        //         minConfidence: 60,
-        //         maxTags: 10
-        //         }
-        //     ]
-        // }
-
-        // const imageKitRes = await imagekitClient.files.upload(uploadParams)
 
         // ----upload media
         const imageKitRes = await mediaUpload(file)
@@ -87,4 +66,37 @@ const uploadMediaServices = async(files: Express.Multer.File[], userId:string)=>
 }
 
 
-export const mediaServices = {uploadMediaServices}
+// ------get media services
+const getMediaServices = async(queryData: any, userId: string)=>{
+
+    const {favorite, q, type} = queryData
+
+    // ----filter data
+    const filter: Record<string, unknown> = {
+        owner: userId,
+        isTrash: false
+    }
+
+    if(favorite === "true"){
+        filter.isFavorite = true
+    }
+
+    if((type === "video" || type === "image")){
+        filter.mediaType = type
+    }
+
+    if(q && typeof q === "string" && q.trim()){
+        const searchTerm = q.trim()
+        filter.$or = [{title: {$regex: searchTerm, $options: "i"}},
+            {objects: {$regex: searchTerm, $options: "i"}}
+        ]
+    }
+
+
+    const media =  await mediaSchema.find(filter).sort({createdAt: -1})
+
+    return media
+}
+
+
+export const mediaServices = {uploadMediaServices, getMediaServices}

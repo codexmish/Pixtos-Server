@@ -21,7 +21,17 @@ const uploadMediaController = catchAsync(
 
 // -----get media controller
 const getMediaController = catchAsync(
-  async (req: Request, res: Response) => {},
+  async (req: Request, res: Response) => {
+
+    const result = await mediaServices.getMediaServices(req.query as any, req.user?.userId as string)
+
+    sendResponse(res, {
+			statusCode: httpStatus.CREATED,
+			success: true,
+			message: "Media get successfully",
+			data: result,
+		});
+  },
 );
 
 // ----- toggleFavorite controller
