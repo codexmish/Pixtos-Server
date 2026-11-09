@@ -178,69 +178,59 @@ const deleteMediaPermanentlyServices = async (
 	return;
 };
 
-
 // ----- empty Trash Services
-const emptyTrashServices = async(userId: string)=>{
-
+const emptyTrashServices = async (userId: string) => {
 	// ----get all trashed media
 	const trashMedia = await mediaSchema.find({
 		owner: userId,
-		isTrash: true
-	})
+		isTrash: true,
+	});
 
-	if(trashMedia.length <= 0){
-		throw new AppError(httpStatus.NOT_FOUND, "No media found o trash")
+	if (trashMedia.length <= 0) {
+		throw new AppError(httpStatus.NOT_FOUND, "No media found o trash");
 	}
- 
-	// -----deleting all trash media
-	for(const media of trashMedia){
-		await mediaDelete(media.fileId)
 
+	// -----deleting all trash media
+	for (const media of trashMedia) {
+		await mediaDelete(media.fileId);
 
 		// -----update album
 
-		await media.deleteOne()
+		await media.deleteOne();
 	}
 
-	return
-
-
-}
-
-
+	return;
+};
 
 // ------get storage stast services
-const getStroageStats = async(userId: string)=>{
-
+const getStroageStats = async (userId: string) => {
 	// -----active Media
 	const activeMedia = await mediaSchema.find({
 		owner: userId,
-		isTrash: false
-	})
+		isTrash: false,
+	});
 
 	// -----facorite item
-	const fevortotalCount = activeMedia.filter((p)=>p.isFavorite).length
+	const fevortotalCount = activeMedia.filter((p) => p.isFavorite).length;
 	// ----total bytes
-	const totalBytes = activeMedia.reduce((sum,p)=> sum + (p.size || 0),0)
+	const totalBytes = activeMedia.reduce((sum, p) => sum + (p.size || 0), 0);
 
 	// ----album count
 
-	// ----video count 
-	const videoCount = activeMedia.filter((p)=> p.mediaType === "video").length
+	// ----video count
+	const videoCount = activeMedia.filter((p) => p.mediaType === "video").length;
 
 	// ----imageCount
-	const imageCount = activeMedia.filter((p)=> p.mediaType === "image").length
+	const imageCount = activeMedia.filter((p) => p.mediaType === "image").length;
 
 	return {
 		mediaCount: activeMedia.length,
 		imageCount,
-		videoCount, 
-		fevortotalCount, 
-		totalBytes
-	}
-
-
-}
+		videoCount,
+		fevortotalCount,
+		totalBytes,
+	};
+};
 
 export const mediaServices = {
 	uploadMediaServices,
@@ -250,5 +240,5 @@ export const mediaServices = {
 	getTrashServices,
 	deleteMediaPermanentlyServices,
 	emptyTrashServices,
-	getStroageStats
+	getStroageStats,
 };

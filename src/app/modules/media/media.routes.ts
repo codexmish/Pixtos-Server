@@ -33,15 +33,17 @@ router.patch(
 //  ----get all trash media
 router.get("/trash", authCheck(), mediaController.getTrashController);
 
-
 // ----delete permanently
-router.patch("/delete/:id", authCheck(), mediaController.deleteMediaPermanentlyController)
+router.patch(
+	"/delete/:id",
+	authCheck(),
+	mediaController.deleteMediaPermanentlyController,
+);
 
-
-// -----empty trash 
-router.delete("/trash", authCheck(), mediaController.emptyTrashController)
+// -----empty trash
+router.delete("/trash", authCheck(), mediaController.emptyTrashController);
 
 //---- media stats
-router.get("/stats", authCheck(), mediaController.getStorageStatsController)
+router.get("/stats", authCheck(), mediaController.getStorageStatsController);
 
 export const mediaRouter = router;

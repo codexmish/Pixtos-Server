@@ -103,28 +103,30 @@ const deleteMediaPermanentlyController = catchAsync(
 );
 
 // ----- empty Trash controller
-const emptyTrashController = catchAsync(
-	async (req: Request, res: Response) => {
-		const result = await mediaServices.emptyTrashServices(req.user?.userId as string)
+const emptyTrashController = catchAsync(async (req: Request, res: Response) => {
+	const result = await mediaServices.emptyTrashServices(
+		req.user?.userId as string,
+	);
 
-		sendResponse(res, {
-			statusCode: httpStatus.OK,
-			success: true,
-			message: "All Trash media deleted",
-		});
-	},
-);
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "All Trash media deleted",
+	});
+});
 
 // ----- get Storage Stats controller
 const getStorageStatsController = catchAsync(
 	async (req: Request, res: Response) => {
-		const result = await mediaServices.getStroageStats(req.user?.userId as string)
+		const result = await mediaServices.getStroageStats(
+			req.user?.userId as string,
+		);
 
 		sendResponse(res, {
 			statusCode: httpStatus.OK,
 			success: true,
 			message: "stats get successfully",
-			data: result
+			data: result,
 		});
 	},
 );
