@@ -41,4 +41,7 @@ router.patch("/delete/:id", authCheck(), mediaController.deleteMediaPermanentlyC
 // -----empty trash 
 router.delete("/trash", authCheck(), mediaController.emptyTrashController)
 
+//---- media stats
+router.get("/stats", authCheck(), mediaController.getStorageStatsController)
+
 export const mediaRouter = router;

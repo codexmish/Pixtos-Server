@@ -207,6 +207,41 @@ const emptyTrashServices = async(userId: string)=>{
 
 }
 
+
+
+// ------get storage stast services
+const getStroageStats = async(userId: string)=>{
+
+	// -----active Media
+	const activeMedia = await mediaSchema.find({
+		owner: userId,
+		isTrash: false
+	})
+
+	// -----facorite item
+	const fevortotalCount = activeMedia.filter((p)=>p.isFavorite).length
+	// ----total bytes
+	const totalBytes = activeMedia.reduce((sum,p)=> sum + (p.size || 0),0)
+
+	// ----album count
+
+	// ----video count 
+	const videoCount = activeMedia.filter((p)=> p.mediaType === "video").length
+
+	// ----imageCount
+	const imageCount = activeMedia.filter((p)=> p.mediaType === "image").length
+
+	return {
+		mediaCount: activeMedia.length,
+		imageCount,
+		videoCount, 
+		fevortotalCount, 
+		totalBytes
+	}
+
+
+}
+
 export const mediaServices = {
 	uploadMediaServices,
 	getMediaServices,
@@ -214,5 +249,6 @@ export const mediaServices = {
 	toggleTrashServices,
 	getTrashServices,
 	deleteMediaPermanentlyServices,
-	emptyTrashServices
+	emptyTrashServices,
+	getStroageStats
 };

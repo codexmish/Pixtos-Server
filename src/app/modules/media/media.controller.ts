@@ -117,7 +117,16 @@ const emptyTrashController = catchAsync(
 
 // ----- get Storage Stats controller
 const getStorageStatsController = catchAsync(
-	async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {
+		const result = await mediaServices.getStroageStats(req.user?.userId as string)
+
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "stats get successfully",
+			data: result
+		});
+	},
 );
 
 export const mediaController = {
