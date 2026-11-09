@@ -1,7 +1,5 @@
-import ImageKit, { toFile } from "@imagekit/nodejs";
 import { AppError } from "../../lib/AppError";
 import httpStatus from "http-status";
-import { imagekitClient } from "../../configs/imageKitConfig";
 import envConfig from "../../configs/envConfig";
 import { mediaSchema } from "../../models/mediaSchema";
 import { mediaDelete, mediaUpload } from "../../lib/imageKitServices";
@@ -180,6 +178,35 @@ const deleteMediaPermanentlyServices = async (
 	return;
 };
 
+
+// ----- empty Trash Services
+const emptyTrashServices = async(userId: string)=>{
+
+	// ----get all trashed media
+	const trashMedia = await mediaSchema.find({
+		owner: userId,
+		isTrash: true
+	})
+
+	if(trashMedia.length <= 0){
+		throw new AppError(httpStatus.NOT_FOUND, "No media found o trash")
+	}
+ 
+	// -----deleting all trash media
+	for(const media of trashMedia){
+		await mediaDelete(media.fileId)
+
+
+		// -----update album
+
+		await media.deleteOne()
+	}
+
+	return
+
+
+}
+
 export const mediaServices = {
 	uploadMediaServices,
 	getMediaServices,
@@ -187,4 +214,5 @@ export const mediaServices = {
 	toggleTrashServices,
 	getTrashServices,
 	deleteMediaPermanentlyServices,
+	emptyTrashServices
 };

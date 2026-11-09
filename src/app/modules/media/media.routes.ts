@@ -17,7 +17,7 @@ router.post(
 router.get("/", authCheck(), mediaController.getMediaController);
 
 // -----signup router
-router.post(
+router.patch(
 	"/fav-toggle/:id",
 	authCheck(),
 	mediaController.toggleFavoriteController,
@@ -32,5 +32,13 @@ router.patch(
 
 //  ----get all trash media
 router.get("/trash", authCheck(), mediaController.getTrashController);
+
+
+// ----delete permanently
+router.patch("/delete/:id", authCheck(), mediaController.deleteMediaPermanentlyController)
+
+
+// -----empty trash 
+router.delete("/trash", authCheck(), mediaController.emptyTrashController)
 
 export const mediaRouter = router;
