@@ -4,6 +4,7 @@ import envConfig from "../../configs/envConfig";
 import { mediaSchema } from "../../models/mediaSchema";
 import { mediaDelete, mediaUpload } from "../../lib/imageKitServices";
 import { IToggleTrash } from "./media.interface";
+import { albumSchema } from "../../models/albumSchema";
 
 // -----upload media Services
 const uploadMediaServices = async (
@@ -172,6 +173,10 @@ const deleteMediaPermanentlyServices = async (
 	}
 
 	// -----remove media from any album
+	await albumSchema.updateMany(
+		{ photos: item.id },
+		{ $pull: { photos: item.id } },
+	);
 
 	await item.deleteOne();
 
@@ -195,6 +200,12 @@ const emptyTrashServices = async (userId: string) => {
 		await mediaDelete(media.fileId);
 
 		// -----update album
+		await albumSchema.updateMany(
+			{ photos: media.id },
+			{
+				$pull: { photos: media.id },
+			},
+		);
 
 		await media.deleteOne();
 	}
@@ -216,6 +227,7 @@ const getStroageStats = async (userId: string) => {
 	const totalBytes = activeMedia.reduce((sum, p) => sum + (p.size || 0), 0);
 
 	// ----album count
+	const albumCount = await albumSchema.countDocuments({ owner: userId });
 
 	// ----video count
 	const videoCount = activeMedia.filter((p) => p.mediaType === "video").length;
@@ -228,6 +240,7 @@ const getStroageStats = async (userId: string) => {
 		imageCount,
 		videoCount,
 		fevortotalCount,
+		albumCount,
 		totalBytes,
 	};
 };
