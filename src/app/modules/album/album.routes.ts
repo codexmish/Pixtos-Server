@@ -15,4 +15,7 @@ router.post(
     albumControllers.createAlbums
 );
 
+// -----get my album
+router.get("/", authCheck(), albumControllers.getMyAlbums)
+
 export const albumRouter = router;

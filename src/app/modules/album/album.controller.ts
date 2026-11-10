@@ -18,7 +18,17 @@ const createAlbums = catchAsync(async (req: Request, res: Response) => {
 });
 
 // -------getMy album
-const getMyAlbums = catchAsync(async (req: Request, res: Response) => {});
+const getMyAlbums = catchAsync(async (req: Request, res: Response) => {
+    const result = await albumServices.getMyAlbums(req.user?.userId as string)
+
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "My Album get successfully",
+        data: result
+    })
+});
 
 // -------get single album
 const getAlbumById = catchAsync(async (req: Request, res: Response) => {});
