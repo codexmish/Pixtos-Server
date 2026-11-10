@@ -64,7 +64,20 @@ const addPhotosToAlbum = catchAsync(async (req: Request, res: Response) => {
 
 // -------remove photos from album
 const removePhotosFromAlbum = catchAsync(
-	async (req: Request, res: Response) => {},
+	async (req: Request, res: Response) => {
+		const result = await albumServices.removePhotoFromAlbum(
+			req.params.photoId as string,
+			req.params.id as string,
+			req.user?.userId as string,
+		);
+
+		sendResponse(res, {
+			success: true,
+			statusCode: httpStatus.OK,
+			message: "photo removed from Album successfully",
+			data: result,
+		});
+	},
 );
 
 // -------delete album

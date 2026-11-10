@@ -103,9 +103,32 @@ const addPhotosToAlbum = async (
 	return updatedAlbum;
 };
 
+// ----remove photo from album
+const removePhotoFromAlbum = async (
+	photoId: string,
+	albumId: string,
+	userId: string,
+) => {
+	// ----checking album exist or not
+	const album = await albumSchema.findOne({
+		_id: albumId,
+		owner: userId,
+	});
+
+	if (!album) {
+		throw new AppError(httpStatus.NOT_FOUND, "album not exist");
+	}
+
+	album.photos = album.photos.filter((p) => p.toString() !== photoId);
+	await album.save();
+
+	return;
+};
+
 export const albumServices = {
 	createAlbums,
 	getMyAlbums,
 	getAlbumById,
 	addPhotosToAlbum,
+	removePhotoFromAlbum,
 };

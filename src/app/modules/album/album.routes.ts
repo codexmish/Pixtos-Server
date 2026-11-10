@@ -28,4 +28,11 @@ router.patch(
 	albumControllers.addPhotosToAlbum,
 );
 
+// -----remove photos form album
+router.patch(
+	"/:id/:photoId",
+	authCheck(),
+	albumControllers.removePhotosFromAlbum,
+);
+
 export const albumRouter = router;
