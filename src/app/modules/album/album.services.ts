@@ -1,5 +1,6 @@
 import { AppError } from "../../lib/AppError";
 import { albumSchema } from "../../models/albumSchema";
+import { mediaSchema } from "../../models/mediaSchema";
 import { ICreateAlbum } from "./album.interface";
 import httpStatus from "http-status";
 
@@ -65,11 +66,46 @@ const getAlbumById = async (albumId: string, userId: string) => {
 		})
 		.populate("owner", "name email");
 
-        if(!albumData){
-            throw new AppError(httpStatus.NOT_FOUND, "Album data not found")
+	if (!albumData) {
+		throw new AppError(httpStatus.NOT_FOUND, "Album data not found");
+	}
+	return albumData;
+};
 
-        }
-        return albumData
-    };
+// -----add photos to album
+const addPhotosToAlbum = async (
+	photoIds: string[],
+	albumId: string,
+	userId: string,
+) => {
+	// ----checking album exist or not
+	const album = await albumSchema.findOne({
+		_id: albumId,
+		owner: userId,
+	});
 
-export const albumServices = { createAlbums, getMyAlbums, getAlbumById };
+	if (!album) {
+		throw new AppError(httpStatus.NOT_FOUND, "album not exist");
+	}
+
+	// ----only keep photos that belong to this user
+	const ownPhotoIds = await mediaSchema
+		.find({ _id: { $in: photoIds }, owner: userId })
+		.distinct("_id");
+
+	// ----add photos avoiding duplicates ($addToSet skips ids already in the album)
+	const updatedAlbum = await albumSchema.findByIdAndUpdate(
+		album._id,
+		{ $addToSet: { photos: { $each: ownPhotoIds } } },
+		{ returnDocument: "after" },
+	);
+
+	return updatedAlbum;
+};
+
+export const albumServices = {
+	createAlbums,
+	getMyAlbums,
+	getAlbumById,
+	addPhotosToAlbum,
+};

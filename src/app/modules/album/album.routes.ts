@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { albumControllers } from "./album.controller";
 import { zodValidation } from "../../middleware/zodValidation";
-import { createAlbumSchema } from "./album.validation";
+import { addPhotoTOAlbumSchema, createAlbumSchema } from "./album.validation";
 import { authCheck } from "../../middleware/authCheck";
 
 const router = Router();
@@ -18,6 +18,14 @@ router.post(
 router.get("/", authCheck(), albumControllers.getMyAlbums);
 
 // -----get single album data
-router.get("/:id", authCheck(), albumControllers.getAlbumById)
+router.get("/:id", authCheck(), albumControllers.getAlbumById);
+
+// -----add imege on album
+router.patch(
+	"/:id",
+	authCheck(),
+	zodValidation(addPhotoTOAlbumSchema),
+	albumControllers.addPhotosToAlbum,
+);
 
 export const albumRouter = router;

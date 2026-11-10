@@ -4,3 +4,8 @@ export interface ICreateAlbum {
 	description?: string;
 	photoIds?: string[];
 }
+
+// // ---- add photos to album
+// export interface IAddToAlbum {
+// 	photoIds: string[];
+// }

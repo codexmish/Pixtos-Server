@@ -47,7 +47,20 @@ const getAlbumById = catchAsync(async (req: Request, res: Response) => {
 });
 
 // -------add photos to album
-const addPhotosToAlbum = catchAsync(async (req: Request, res: Response) => {});
+const addPhotosToAlbum = catchAsync(async (req: Request, res: Response) => {
+	const result = await albumServices.addPhotosToAlbum(
+		req.body.photoIds,
+		req.params.id as string,
+		req.user?.userId as string,
+	);
+
+	sendResponse(res, {
+		success: true,
+		statusCode: httpStatus.OK,
+		message: "Album updated successfully",
+		data: result,
+	});
+});
 
 // -------remove photos from album
 const removePhotosFromAlbum = catchAsync(

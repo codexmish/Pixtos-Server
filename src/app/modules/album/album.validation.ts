@@ -24,3 +24,13 @@ export const createAlbumSchema = z.object({
 		)
 		.optional(),
 });
+
+// -----create album validation
+export const addPhotoTOAlbumSchema = z.object({
+	photoIds: z.array(
+		z
+			.string("Photo id must be text")
+			.regex(/^[0-9a-fA-F]{24}$/, "Invalid photo id"),
+		"photoIds must be a list of photo ids",
+	),
+});
