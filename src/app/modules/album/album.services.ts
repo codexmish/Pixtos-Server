@@ -125,10 +125,30 @@ const removePhotoFromAlbum = async (
 	return;
 };
 
+// ------delete album
+const deleteAlbum = async (albumId: string, userId: string) => {
+	// ----checking album exist or not
+	// ----checking album exist or not
+	const album = await albumSchema.findOne({
+		_id: albumId,
+		owner: userId,
+	});
+
+	if (!album) {
+		throw new AppError(httpStatus.NOT_FOUND, "album not exist");
+	}
+
+	// ----deleting album
+	await albumSchema.findByIdAndDelete(album.id);
+
+	return;
+};
+
 export const albumServices = {
 	createAlbums,
 	getMyAlbums,
 	getAlbumById,
 	addPhotosToAlbum,
 	removePhotoFromAlbum,
+	deleteAlbum,
 };

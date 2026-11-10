@@ -81,7 +81,18 @@ const removePhotosFromAlbum = catchAsync(
 );
 
 // -------delete album
-const deleteAlbum = catchAsync(async (req: Request, res: Response) => {});
+const deleteAlbum = catchAsync(async (req: Request, res: Response) => {
+	const result = await albumServices.deleteAlbum(
+		req.params.id as string,
+		req.user?.userId as string,
+	);
+
+	sendResponse(res, {
+		success: true,
+		statusCode: httpStatus.OK,
+		message: "Album deleted successfully",
+	});
+});
 
 export const albumControllers = {
 	createAlbums,

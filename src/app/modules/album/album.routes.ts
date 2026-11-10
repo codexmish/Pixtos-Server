@@ -35,4 +35,7 @@ router.patch(
 	albumControllers.removePhotosFromAlbum,
 );
 
+// -----delete album
+router.delete("/:id", authCheck(), albumControllers.deleteAlbum);
+
 export const albumRouter = router;
