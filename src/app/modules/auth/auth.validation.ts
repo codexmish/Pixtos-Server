@@ -54,6 +54,15 @@ export const resendOtpSchema = z.object({
 	email: z.email("Invalid email address").toLowerCase(),
 });
 
+// -----update profile validation
+export const updateProfileSchema = z.object({
+	name: z
+		.string("Name is required")
+		.trim()
+		.min(3, "name must be 3 caracters long")
+		.max(50, "name max 50 caracters long"),
+});
+
 // -----change password validation
 export const changePasswordSchema = z.object({
 	oldPassword: z

@@ -32,6 +32,22 @@ export const mediaUpload = async (file: Express.Multer.File) => {
 	return imageKitRes;
 };
 
+// ----upload avatar
+export const avatarImageUpload = async (file: Express.Multer.File) => {
+	const fileObj = await toFile(file.buffer, file.originalname, {
+		type: file.mimetype,
+	});
+
+	const imageKitRes = await imagekitClient.files.upload({
+		file: fileObj,
+		fileName: `avatar-${Date.now()}`,
+		folder: "/avatars",
+		useUniqueFileName: true,
+	});
+
+	return imageKitRes;
+};
+
 // -----delete media
 export const mediaDelete = async (fileId: string) => {
 	try {

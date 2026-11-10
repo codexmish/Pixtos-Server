@@ -199,6 +199,40 @@ const changePasswordController = catchAsync(
 	},
 );
 
+// -----update profile controller (name)
+const updateProfileController = catchAsync(
+	async (req: Request, res: Response) => {
+		const result = await authServices.updateProfileServices(
+			req.body,
+			req.user as RequestUser,
+		);
+
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "Profile updated successfully",
+			data: result,
+		});
+	},
+);
+
+// -----update avatar controller
+const updateAvatarController = catchAsync(
+	async (req: Request, res: Response) => {
+		const result = await authServices.updateAvatarServices(
+			req.file,
+			req.user as RequestUser,
+		);
+
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: "Avatar updated successfully",
+			data: result,
+		});
+	},
+);
+
 export const authControllers = {
 	signupContorller,
 	otpVerifyController,
@@ -210,4 +244,6 @@ export const authControllers = {
 	logoutController,
 	resendOtpController,
 	changePasswordController,
+	updateProfileController,
+	updateAvatarController,
 };

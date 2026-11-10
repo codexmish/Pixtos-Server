@@ -8,6 +8,7 @@ import {
 	IResetPassword,
 	ISignIn,
 	ISignup,
+	IUpdateProfile,
 } from "./auth.interface";
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
@@ -20,6 +21,7 @@ import { jwtUtils } from "../../lib/jwt";
 import { SignOptions } from "jsonwebtoken";
 import { WelcomeMailTemp } from "../../emailTemplates/weclomeMailTemp";
 import { RequestUser } from "../../middleware/authCheck";
+import { avatarImageUpload, mediaDelete } from "../../lib/imageKitServices";
 
 // -------signup services
 const signupServices = async (payload: ISignup) => {
@@ -457,6 +459,73 @@ const changePasswordServices = async (
 	return;
 };
 
+// -----update profile services (name)
+const updateProfileServices = async (
+	payload: IUpdateProfile,
+	user: RequestUser,
+) => {
+	const { name } = payload;
+
+	// -----update user name (returns the updated user)
+	const updatedUser = await userSchema.findByIdAndUpdate(
+		user.userId,
+		{ name },
+		{ returnDocument: "after" },
+	);
+
+	if (!updatedUser) {
+		throw new AppError(httpStatus.NOT_FOUND, "user not found");
+	}
+
+	return updatedUser;
+};
+
+// -----update avatar services
+const updateAvatarServices = async (
+	file: Express.Multer.File | undefined,
+	user: RequestUser,
+) => {
+	if (!file) {
+		throw new AppError(httpStatus.BAD_REQUEST, "No image uploaded");
+	}
+
+	// -----checking user (avatarFileId is select:false, so ask for it)
+	const userExist = await userSchema
+		.findById(user.userId)
+		.select("+avatarFileId");
+
+	if (!userExist) {
+		throw new AppError(httpStatus.NOT_FOUND, "user not found");
+	}
+
+	// -----upload new avatar on imagekit
+	const imageKitRes = await avatarImageUpload(file);
+
+	if (!imageKitRes.url || !imageKitRes.fileId) {
+		throw new AppError(
+			httpStatus.INTERNAL_SERVER_ERROR,
+			"Avatar upload failed. please try again",
+		);
+	}
+
+	// -----small square image is enough for avatar
+	const avatarUrl = `${imageKitRes.url}?tr=w-256,h-256`;
+
+	// -----save new avatar (returns the updated user)
+	const updatedUser = await userSchema.findByIdAndUpdate(
+		userExist._id,
+		{ avatar: avatarUrl, avatarFileId: imageKitRes.fileId },
+		{ returnDocument: "after" },
+	);
+
+	// -----deleting old avatar from imagekit (after new one is saved)
+	if (userExist.avatarFileId) {
+		await mediaDelete(userExist.avatarFileId);
+	}
+
+	return updatedUser;
+};
+
 export const authServices = {
 	signupServices,
 	otpVerifyServices,
@@ -467,4 +536,6 @@ export const authServices = {
 	refreshTokenServices,
 	resendOtpServices,
 	changePasswordServices,
+	updateProfileServices,
+	updateAvatarServices,
 };

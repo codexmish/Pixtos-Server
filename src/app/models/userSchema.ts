@@ -27,6 +27,12 @@ const user = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
+		// -----imagekit file id of the avatar (needed to delete old avatar)
+		avatarFileId: {
+			type: String,
+			default: "",
+			select: false,
+		},
 		role: {
 			type: String,
 			require: true,

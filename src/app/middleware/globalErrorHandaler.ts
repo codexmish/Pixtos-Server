@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import mongoose from "mongoose";
+import multer from "multer";
 import envConfig from "../configs/envConfig";
 import { AppError } from "../lib/AppError";
 import { sendResponse } from "../lib/sendResponse";
@@ -41,6 +42,11 @@ export const globalErrorHandaler = (
 		statusCode = httpStatus.CONFLICT;
 		errMessage = field ? `${field} already exists` : "Duplicate value";
 		if (field) errorDetails = [{ field, message: errMessage }];
+	} else if (err instanceof multer.MulterError) {
+		// -----file upload rule failed (file too large, too many files ...)
+		statusCode = httpStatus.BAD_REQUEST;
+		errMessage =
+			err.code === "LIMIT_FILE_SIZE" ? "File is too large" : err.message;
 	} else if (err instanceof ZodError) {
 		statusCode = httpStatus.BAD_REQUEST;
 		errMessage = "Validation failed";

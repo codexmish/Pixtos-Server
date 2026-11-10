@@ -7,10 +7,12 @@ import {
 	otpVerifySchema,
 	resendOtpSchema,
 	resetPasswordSchema,
+	updateProfileSchema,
 	userSignInSchema,
 	userSignupSchema,
 } from "./auth.validation";
 import { authCheck } from "../../middleware/authCheck";
+import { avatarUpload } from "../../lib/multer";
 
 const router = Router();
 
@@ -71,6 +73,22 @@ router.patch(
 	authCheck(),
 	zodValidation(changePasswordSchema),
 	authControllers.changePasswordController,
+);
+
+// -----update profile router (name)
+router.patch(
+	"/update-profile",
+	authCheck(),
+	zodValidation(updateProfileSchema),
+	authControllers.updateProfileController,
+);
+
+// -----update avatar router (form-data, field name "avatar")
+router.patch(
+	"/update-avatar",
+	authCheck(),
+	avatarUpload.single("avatar"),
+	authControllers.updateAvatarController,
 );
 
 export const authRouter = router;

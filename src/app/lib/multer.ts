@@ -26,3 +26,21 @@ export const upload = multer({
 		}
 	},
 });
+
+// -----avatar upload (one image only, small size)
+export const avatarUpload = multer({
+	storage: storage,
+	limits: {
+		fileSize: 5 * 1024 * 1024, //5 mb max
+		files: 1,
+	},
+	fileFilter: (_req, file, cb) => {
+		if (file.mimetype.startsWith("image/")) {
+			cb(null, true);
+		} else {
+			cb(
+				new AppError(httpStatus.NOT_ACCEPTABLE, "Only image files are allowed"),
+			);
+		}
+	},
+});
