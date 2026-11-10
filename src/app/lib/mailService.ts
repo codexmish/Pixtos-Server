@@ -25,7 +25,7 @@ export const mailSender = async ({
 }: MailPayload<string>) => {
 	try {
 		await transporter.sendMail({
-			from: "Blood For Life <team@bfl.com>", // sender address
+			from: "Pixtos <team@bfl.com>", // sender address
 			to: email, // list of recipients
 			subject: subject, // subject line
 			html: mailTemp, // HTML body

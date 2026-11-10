@@ -150,7 +150,7 @@ const otpVerifyServices = async (payload: IOtpVerify) => {
 	// -----sending user welcome mail
 	await mailSender({
 		email: createdUser.email,
-		subject: "Welcome to Blood For Life Community",
+		subject: "Welcome to Pixtos",
 		mailTemp: WelcomeMailTemp(createdUser.name, `${envConfig.frontend_url}`),
 	});
 
