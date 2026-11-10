@@ -7,6 +7,6 @@ const router = Router();
 
 router.use("/auth", authRouter);
 router.use("/media", mediaRouter);
-router.use("/album", albumRouter)
+router.use("/album", albumRouter);
 
 export default router;
