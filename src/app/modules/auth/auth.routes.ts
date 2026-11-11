@@ -13,12 +13,14 @@ import {
 } from "./auth.validation";
 import { authCheck } from "../../middleware/authCheck";
 import { avatarUpload } from "../../lib/multer";
+import { limiter } from "../../lib/requestLimiter";
 
 const router = Router();
 
 // -----signup router
 router.post(
 	"/signup",
+	limiter(10 * 60 * 1000, 5, false),
 	zodValidation(userSignupSchema),
 	authControllers.signupContorller,
 );
@@ -26,6 +28,7 @@ router.post(
 // -------otp verify and create user router
 router.post(
 	"/otp-verify",
+	limiter(10 * 60 * 1000, 5),
 	zodValidation(otpVerifySchema),
 	authControllers.otpVerifyController,
 );
@@ -33,6 +36,7 @@ router.post(
 // ------sign in router
 router.post(
 	"/signin",
+	limiter(10 * 60 * 1000, 5),
 	zodValidation(userSignInSchema),
 	authControllers.signInController,
 );
@@ -40,6 +44,7 @@ router.post(
 // -------forget password router
 router.post(
 	"/forget-password",
+	limiter(10 * 60 * 1000, 5, false),
 	zodValidation(forgetPasswordSchema),
 	authControllers.forgetPasswordController,
 );
@@ -47,6 +52,7 @@ router.post(
 // -------reset password router
 router.post(
 	"/reset-password",
+	limiter(10 * 60 * 1000, 5),
 	zodValidation(resetPasswordSchema),
 	authControllers.resetPasswordController,
 );
@@ -55,7 +61,11 @@ router.post(
 router.get("/me", authCheck(), authControllers.userProfileController);
 
 // ----access token generate with refresh token router
-router.post("/refresh-token", authControllers.refreshTokenController);
+router.post(
+	"/refresh-token",
+	limiter(10 * 60 * 1000, 5),
+	authControllers.refreshTokenController,
+);
 
 // ----logout router
 router.post("/logout", authControllers.logoutController);
@@ -63,6 +73,7 @@ router.post("/logout", authControllers.logoutController);
 // -----resend otp router
 router.post(
 	"/resend-otp",
+	limiter(10 * 60 * 1000, 5, false),
 	zodValidation(resendOtpSchema),
 	authControllers.resendOtpController,
 );
@@ -70,6 +81,7 @@ router.post(
 // -----change password router
 router.patch(
 	"/change-password",
+	limiter(10 * 60 * 1000, 5),
 	authCheck(),
 	zodValidation(changePasswordSchema),
 	authControllers.changePasswordController,
@@ -86,6 +98,7 @@ router.patch(
 // -----update avatar router (form-data, field name "avatar")
 router.patch(
 	"/update-avatar",
+	limiter(10 * 60 * 1000, 5, false),
 	authCheck(),
 	avatarUpload.single("avatar"),
 	authControllers.updateAvatarController,

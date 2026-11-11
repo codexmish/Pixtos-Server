@@ -25,7 +25,7 @@ export const mailSender = async ({
 }: MailPayload<string>) => {
 	try {
 		await transporter.sendMail({
-			from: "Pixtos <team@bfl.com>", // sender address
+			from: `Pixtos <${envConfig.SMTP_USER}>`, // sender address (gmail sends from the smtp account)
 			to: email, // list of recipients
 			subject: subject, // subject line
 			html: mailTemp, // HTML body

@@ -14,6 +14,12 @@ app.use(requestLogger);
 
 app.use(helmet());
 app.use(express.json());
+
+// =====behind a proxy in production, so limiter sees the real user ip
+if (envConfig.node_env === "production") {
+	app.set("trust proxy", 1);
+}
+
 app.use(
 	cors({
 		origin: envConfig.frontend_url,

@@ -44,10 +44,7 @@ const getMyAlbums = async (userId: string) => {
 		})
 		.sort({ updatedAt: -1 });
 
-	if (myAlbums.length === 0) {
-		throw new AppError(httpStatus.NOT_FOUND, "No album found");
-	}
-
+	// -----no album is not an error, empty list goes back
 	return myAlbums;
 };
 

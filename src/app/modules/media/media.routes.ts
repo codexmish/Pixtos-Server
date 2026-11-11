@@ -4,12 +4,14 @@ import { upload } from "../../lib/multer";
 import { mediaController } from "./media.controller";
 import { zodValidation } from "../../middleware/zodValidation";
 import { bulkFavoriteSchema, bulkTrashSchema } from "./media.validation";
+import { limiter } from "../../lib/requestLimiter";
 
 const router = Router();
 
 // -----signup router
 router.post(
 	"/upload",
+	limiter(10 * 60 * 1000, 20, false),
 	authCheck(),
 	upload.array("media", 20),
 	mediaController.uploadMediaController,

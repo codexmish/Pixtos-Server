@@ -28,9 +28,10 @@ const uploadMediaServices = async (
 		const endPoint = envConfig.IMAGEKIT_URL_ENDPOINT;
 		const imagePath = imageKitRes.filePath;
 		const transFormation = "tr:w-400";
+		// ----filePath already starts with "/", so no extra "/" before it
 		const thumbnailUrl = isVideo
-			? `${endPoint}/${transFormation}/${imagePath}/ik-thumbnail.jpg`
-			: `${endPoint}/${transFormation}/${imagePath}`;
+			? `${endPoint}/${transFormation}${imagePath}/ik-thumbnail.jpg`
+			: `${endPoint}/${transFormation}${imagePath}`;
 		const detectedObjects: string[] = [];
 
 		if (imageKitRes.AITags && Array.isArray(imageKitRes.AITags)) {
