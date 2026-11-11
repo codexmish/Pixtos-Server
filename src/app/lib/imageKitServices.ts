@@ -10,7 +10,7 @@ export const mediaUpload = async (file: Express.Multer.File) => {
 
 	const uploadParams: ImageKit.FileUploadParams = {
 		file: fileObj,
-		fileName: `${file.originalname}-${Date.now()}`,
+		fileName: `${Date.now()}-${file.originalname}`, // date first, so the name still ends with the extension
 		folder: isVideo ? "/my-videos" : "/my-photos",
 		useUniqueFileName: true,
 		responseFields: ["tags"],
@@ -40,7 +40,7 @@ export const avatarImageUpload = async (file: Express.Multer.File) => {
 
 	const imageKitRes = await imagekitClient.files.upload({
 		file: fileObj,
-		fileName: `avatar-${Date.now()}`,
+		fileName: `${Date.now()}-${file.originalname}`, // date first, so the name still ends with the extension
 		folder: "/avatars",
 		useUniqueFileName: true,
 	});
