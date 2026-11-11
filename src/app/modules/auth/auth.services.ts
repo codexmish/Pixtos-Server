@@ -434,7 +434,7 @@ const changePasswordServices = async (
 	);
 
 	if (!isPasswordMatched) {
-		throw new AppError(httpStatus.UNAUTHORIZED, "Old password is not correct");
+		throw new AppError(httpStatus.BAD_REQUEST, "Old password is not correct");
 	}
 
 	// -----new password can't be same as old
