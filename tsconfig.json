@@ -2,8 +2,8 @@
     "compilerOptions": {
         "module": "esnext",
         "moduleResolution": "bundler",
-        "target": "esnext",
-        "rootDir": "./src",
+        "target": "es2023",
+        "rootDir": "./",
         "outDir": "./dist",
         "strict": true,
         "esModuleInterop": true,
@@ -11,4 +11,6 @@
         "forceConsistentCasingInFileNames": true,
         "ignoreDeprecations": "6.0"
     },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
 }
