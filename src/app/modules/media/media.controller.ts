@@ -131,6 +131,40 @@ const getStorageStatsController = catchAsync(
 	},
 );
 
+// ----- bulk favorite controller
+const bulkFavoriteController = catchAsync(
+	async (req: Request, res: Response) => {
+		const result = await mediaServices.bulkFavoriteServices(
+			req.body,
+			req.user?.userId as string,
+		);
+
+		sendResponse(res, {
+			statusCode: httpStatus.OK,
+			success: true,
+			message: req.body.isFavorite
+				? `${result.count} items added to favorites`
+				: `${result.count} items removed from favorites`,
+			data: result,
+		});
+	},
+);
+
+// ----- bulk trash controller
+const bulkTrashController = catchAsync(async (req: Request, res: Response) => {
+	const result = await mediaServices.bulkTrashServices(
+		req.body,
+		req.user?.userId as string,
+	);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: `${result.count} items moved to trash`,
+		data: result,
+	});
+});
+
 export const mediaController = {
 	uploadMediaController,
 	getMediaController,
@@ -140,4 +174,6 @@ export const mediaController = {
 	deleteMediaPermanentlyController,
 	emptyTrashController,
 	getStorageStatsController,
+	bulkFavoriteController,
+	bulkTrashController,
 };

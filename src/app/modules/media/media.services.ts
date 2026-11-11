@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import envConfig from "../../configs/envConfig";
 import { mediaSchema } from "../../models/mediaSchema";
 import { mediaDelete, mediaUpload } from "../../lib/imageKitServices";
-import { IToggleTrash } from "./media.interface";
+import { IBulkFavorite, IBulkTrash, IToggleTrash } from "./media.interface";
 import { albumSchema } from "../../models/albumSchema";
 
 // -----upload media Services
@@ -245,6 +245,40 @@ const getStroageStats = async (userId: string) => {
 	};
 };
 
+// ------bulk favorite services (sets the value, doesn't toggle)
+const bulkFavoriteServices = async (payload: IBulkFavorite, userId: string) => {
+	const { ids, isFavorite } = payload;
+
+	// -----updating only this user's media that is not in trash
+	const result = await mediaSchema.updateMany(
+		{ _id: { $in: ids }, owner: userId, isTrash: false },
+		{ isFavorite },
+	);
+
+	if (result.matchedCount === 0) {
+		throw new AppError(httpStatus.NOT_FOUND, "Media not found");
+	}
+
+	return { count: result.matchedCount };
+};
+
+// ------bulk trash services
+const bulkTrashServices = async (payload: IBulkTrash, userId: string) => {
+	const { ids } = payload;
+
+	// -----moving only this user's media that is not in trash yet
+	const result = await mediaSchema.updateMany(
+		{ _id: { $in: ids }, owner: userId, isTrash: false },
+		{ isTrash: true, trashedAt: new Date() },
+	);
+
+	if (result.matchedCount === 0) {
+		throw new AppError(httpStatus.NOT_FOUND, "Media not found");
+	}
+
+	return { count: result.matchedCount };
+};
+
 export const mediaServices = {
 	uploadMediaServices,
 	getMediaServices,
@@ -254,4 +288,6 @@ export const mediaServices = {
 	deleteMediaPermanentlyServices,
 	emptyTrashServices,
 	getStroageStats,
+	bulkFavoriteServices,
+	bulkTrashServices,
 };

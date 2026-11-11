@@ -2,6 +2,8 @@ import { Router } from "express";
 import { authCheck } from "../../middleware/authCheck";
 import { upload } from "../../lib/multer";
 import { mediaController } from "./media.controller";
+import { zodValidation } from "../../middleware/zodValidation";
+import { bulkFavoriteSchema, bulkTrashSchema } from "./media.validation";
 
 const router = Router();
 
@@ -45,5 +47,21 @@ router.delete("/trash", authCheck(), mediaController.emptyTrashController);
 
 //---- media stats
 router.get("/stats", authCheck(), mediaController.getStorageStatsController);
+
+// -----bulk favorite router
+router.patch(
+	"/bulk-favorite",
+	authCheck(),
+	zodValidation(bulkFavoriteSchema),
+	mediaController.bulkFavoriteController,
+);
+
+// -----bulk move to trash router
+router.patch(
+	"/bulk-trash",
+	authCheck(),
+	zodValidation(bulkTrashSchema),
+	mediaController.bulkTrashController,
+);
 
 export const mediaRouter = router;
