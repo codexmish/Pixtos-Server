@@ -35,7 +35,7 @@ app.use(envConfig.BASE_URL, router);
 app.get("/", async (req: Request, res: Response) => {
 	res.status(200).json({
 		success: true,
-		message: "Welcome to Pixtos",
+		message: "Welcome to Pixtos with docker",
 	});
 });
 
